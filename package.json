@@ -1,0 +1,24 @@
+{
+  "name": "kino-prague",
+  "version": "1.0.0",
+  "description": "1. [Kino Aero](https://www.kinoaero.cz/en) 2. [Ponerepo Cinema](https://nfa.cz/en/ponrepo-cinema/program/program) 3. [Kino Lucerna](https://www.kinolucerna.cz/en) 4. [Kino Svetozor](https://www.kinosvetozor.cz/en) 5. [Kino 35](https://kino35.ifp.cz/) 6. [Kino Atlas](https://www.kinoatlaspraha.cz/)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akramit/kino-prague.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/akramit/kino-prague/issues"
+  },
+  "homepage": "https://github.com/akramit/kino-prague#readme",
+  "dependencies": {
+    "playwright": "^1.55.0"
+  }
+}

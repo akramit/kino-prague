@@ -1,0 +1,7 @@
+{
+  "name": "Kino Svetozor",
+  "url": "https://www.kinosvetozor.cz/en",
+  "image": "/kino-svetozor.png",
+  "takenAt": null,
+  "error": "Error: browser.newPage: Target page, context or browser has been closed"
+}
