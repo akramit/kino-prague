@@ -1,15 +1,15 @@
 
 import './theatre.css'
 
-export function Theatre({ theatreName, shows = [] }) {
+export function Theatre({ theatre }) {
 
     return (
         <section className="theatre">
             <header className="theatre__header">
-                <h3 className="theatre__title">{theatreName}</h3>
+                <h3 className="theatre__title">{theatre.theatreName}</h3>
             </header>
-            {shows.length > 0 ? (
-                shows.map((show) => (
+            {theatre.shows.length > 0 ? (
+                theatre.shows.map((show) => (
                     <>
                         <div className="date">
                             <h3>{show.date}</h3>

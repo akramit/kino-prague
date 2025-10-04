@@ -1,6 +1,4 @@
-//import { useState } from 'react'
-//import reactLogo from './assets/react.svg'
-//import viteLogo from '/vite.svg'
+import { useCallback, useState } from 'react'
 import './App.css'
 import { TopBar } from './components/TopBar'
 import { Theatre } from './components/theatre'
@@ -65,16 +63,52 @@ const shows = [
   }
 ];
 
+const otherShows = [
+  {
+    date: '10-10-2025',
+    movies : [
+      {
+        name: "Dune: Part Three",
+        time: '12 PM'
+      }
+    ]
+  },
+]
+
+const theatreData = [
+  {
+    theatreName : 'Kino Aero',
+    shows
+  },
+  {
+    theatreName : 'Kino Ponerepo',
+    shows: otherShows
+  }
+];
+
+
+
 function App() {
   //const [count, setCount] = useState(0)
-  const showTimes = [("2pm","2PM Mickey 17"), ('a', 'b')]
+  const [currentTheatre, setCurrentTheatre] = useState(theatreData[0]);  
+
+  //const [currentTheatreShows, setCurrentTheatreShows] = useState(shows);
+  const handleTheatreChange = useCallback((theatreName) => {
+    const newTheatre = theatreData.find((theatre) => theatre.theatreName === theatreName);
+    if (newTheatre) {
+      setCurrentTheatre(newTheatre);
+    } else {
+      setCurrentTheatre({theatreName: theatreName, shows: []});
+    }
+  });
+
   return (
     <>
-      <TopBar/>
+      <TopBar
+        onChangeTheatre = {handleTheatreChange}
+      />
       <Theatre 
-        cinemaName="Kino Ponerepo"
-        shows={shows}
-
+        theatre={currentTheatre}
       />
     </>
   )
