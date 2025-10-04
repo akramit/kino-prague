@@ -1,0 +1,39 @@
+/* Styling the top bar container for a polished hero look */
+.topbar {
+    background: linear-gradient(135deg, #1f2937, #3b82f6);
+    color: #f9fafb;
+    border-radius: 1rem;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 20px 45px -25px rgba(30, 64, 175, 0.8);
+    text-align: left;
+    position: fixed;
+    top: 0;
+    left:50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.topbar__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.topbar__title {
+    margin: 0;
+    font-size: 2rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+@media (max-width: 600px) {
+    .topbar {
+        padding: 1.25rem 1.5rem;
+        border-radius: 0.75rem;
+        top: 1rem;
+    }
+
+    .topbar__title {
+        font-size: 1.5rem;
+    }
+}
