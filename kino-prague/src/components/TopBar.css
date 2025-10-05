@@ -1,11 +1,11 @@
 
 .topbar {
-    background: linear-gradient(135deg, #1f2937, #3b82f6);
-    color: #f9fafb;
+    background: linear-gradient(135deg, #37445d, #e47f61);
+    color: #abd4fc;
     border-radius: 1rem;
     padding: 1.5rem 2rem;
     box-shadow: 0 20px 45px -25px rgba(30, 64, 175, 0.8);
-    text-align: left;
+    text-align: center;
     margin-bottom: 30px;
     position : relative;
     top: 10px;
