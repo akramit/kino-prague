@@ -1,37 +1,36 @@
 
 from __future__ import annotations
-
 from datetime import datetime
 import re
 from typing import Any, Dict, List
-
 import requests
 from bs4 import BeautifulSoup
+import json
 
 
 websites = [
     {   
-        'name': 'Kino Aero',
+        'theatreName': 'Kino Aero',
         'url' : 'https://www.kinoaero.cz/en'
     },
     {   
-        'name': 'Ponerepo Cinema',
-        'url' : 'https://nfa.cz/en/ponerepo-cinema/program/program'
+        'theatreName': 'Ponerepo Cinema',
+        'url' : 'https://nfa.cz/en/ponrepo-cinema'
     },
     { 
-        'name': 'Kino Lucerna',
+        'theatreName': 'Kino Lucerna',
         'url' : 'https://www.kinolucerna.cz/en'
     },
     { 
-        'name': 'Kino Svetozor',
+        'theatreName': 'Kino Svetozor',
         'url' : 'https://www.kinosvetozor.cz/en'
     },
     { 
-        'name': 'Kino 35',
+        'theatreName': 'Kino 35',
         'url' : 'https://kino35.ifp.cz/'
     },
     {
-        'name': 'Kino Atlas',
+        'theatreName': 'Kino Atlas',
         'url' : 'https://www.kinoatlaspraha.cz/'
     }
 ]
@@ -84,7 +83,8 @@ def gather_data_from_url(url: str) -> List[Dict[str, Any]]:
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
             "Chrome/125.0.0.0 Safari/537.36"
-        )
+        ),
+        "Cookie" : "lang=en"
     }
 
     try:
@@ -100,35 +100,43 @@ def gather_data_from_url(url: str) -> List[Dict[str, Any]]:
     if not program_root:
         return schedule
 
-    for day_anchor in program_root.select("a.program__day"):
-        day_id = day_anchor.get("id", "")
-        raw_date = day_id.replace("program-day-", "") if day_id else day_anchor.get_text(strip=True)
-        date_str = _normalise_date(raw_date)
+    for program_root in soup.select("#program .program") :
+        day_anchors = program_root.select("a.program__day")
+        for day_anchor in day_anchors:
+            day_id = day_anchor.get("id", "")
+            raw_date = day_id.replace("program-day-", "") if day_id else day_anchor.get_text(strip=True)
+            date_str = _normalise_date(raw_date)
 
-        shows: List[Dict[str, str]] = []
-        info_block = day_anchor.find_next_sibling("div", class_="program__info")
-        if info_block:
-            for row in info_block.select(".program__info-row"):
-                time_node = row.select_one(".program__hour") or row.find("time")
-                raw_time = time_node.get_text(strip=True) if time_node else ""
+            shows: List[Dict[str, str]] = []
+            info_block = day_anchor.find_next_sibling("div", class_="program__info")
+            if info_block:
+                for row in info_block.select(".program__info-row"):
+                    time_node = row.select_one(".program__hour") or row.find("time")
+                    raw_time = time_node.get_text(strip=True) if time_node else ""
 
-                title_node = row.select_one(".program__movie-name") or row.select_one("[data-page-title]")
-                title = title_node.get_text(strip=True) if title_node else ""
+                    title_node = row.select_one(".program__movie-name") or row.select_one("[data-page-title]")
+                    title = title_node.get_text(strip=True) if title_node else ""
 
-                if title or raw_time:
-                    shows.append({
-                        "name": title,
-                        "time": _format_time(raw_time),
-                    })
+                    if title or raw_time:
+                        shows.append({
+                            "name": title,
+                            "time": _format_time(raw_time),
+                        })
 
-        schedule.append({
-            "date": date_str,
-            "shows": shows,
-        })
+            schedule.append({
+                "date": date_str,
+                "movies": shows,
+            })
 
     return schedule
 
 if __name__ == '__main__' : 
-    url = 'https://www.kinolucerna.cz/en'
-    data = gather_data_from_url(url)
-    print(data)
+    final_data = []
+    for website in websites:
+        #if website["name"] == 'Kino Aero' :
+        cinema_data = {}
+        cinema_data['theatreName'] = website['theatreName']
+        shows = gather_data_from_url(website['url'])
+        cinema_data['shows'] = shows
+        final_data.append(cinema_data)
+    print(json.dumps(final_data))    
