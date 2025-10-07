@@ -59,6 +59,15 @@
 .time-cell { white-space: nowrap; }
 .movie {white-space : nowrap;}
 
+.theatre__link {
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.theatre__link:hover {
+  color: #ff7700;
+}
 
 @media (max-width: 600px) {
     .theatre {

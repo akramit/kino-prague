@@ -1,15 +1,35 @@
 
 import './theatre.css'
+import { THEATRES_URL } from './theatreData'
+
+
 
 export function Theatre({ theatre }) {
 
+    const theatreUrl = THEATRES_URL.find(th => th.name === theatre.theatreName)?.url;
     return (
         <section className="theatre">
+            {/* <header className="theatre__header">
+                <h3 className="theatre__title">{theatre?.theatreName ? theatre.theatreName : 'Loading...'}</h3>
+            </header> */}
             <header className="theatre__header">
-                <h3 className="theatre__title">{theatre.theatreName}</h3>
+                <h3 className="theatre__title">
+                    {theatre?.theatreName ? (
+                    <a 
+                        href={theatreUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="theatre__link"
+                    >
+                        {theatre.theatreName}
+                    </a>
+                    ) : (
+                    'Loading...'
+                    )}
+                </h3>
             </header>
-            {theatre.shows.length > 0 ? (
-                theatre.shows.map((show) => (
+            {theatre?.shows?.length > 0 ? (
+                theatre?.shows?.map((show) => (
                     <>
                         <div className="date">
                             <h3>{show.date}</h3>
