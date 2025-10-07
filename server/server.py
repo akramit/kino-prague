@@ -9,7 +9,7 @@ def create_app() -> Flask:
     app = Flask(__name__)
     CORS(app, origins=[
         "http://localhost:5173",    # React local dev server
-        "https://kino-prague.vercel.app/"    # Production site
+        "https://kino-prague.vercel.app"    # Production site
     ])
     app.config["APP_NAME"] = os.getenv("APP_NAME", "kino-prague-server")
 
