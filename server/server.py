@@ -2,10 +2,15 @@ import os
 import logging
 from logging.handlers import RotatingFileHandler
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from scrapper import get_theatres_data
 
 def create_app() -> Flask:
     app = Flask(__name__)
+    CORS(app, origins=[
+        "http://localhost:5173",    # React local dev server
+        "https://kino-prague.vercel.app/"    # Production site
+    ])
     app.config["APP_NAME"] = os.getenv("APP_NAME", "kino-prague-server")
 
     # --- logging (stdout + optional rotating file) ---

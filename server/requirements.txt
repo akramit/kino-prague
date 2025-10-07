@@ -2,3 +2,4 @@ requests
 bs4
 Flask==3.0.3
 gunicorn==22.0.0
+flask-cors==6.0.1
