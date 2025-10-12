@@ -55,9 +55,13 @@
 }
 
 .table-showtimes { border-collapse: separate; border-spacing: 0 8px; }
-.td-showtimes { text-align: left; padding-right: 16px; }
+.td-showtimes { text-align: left; padding-right: 160px; }
 .time-cell { white-space: nowrap; }
 .movie {white-space : nowrap;}
+
+.table-showtimes__row {
+    cursor: default;
+}
 
 .theatre__link {
   color: #ffffff;
@@ -67,6 +71,58 @@
 
 .theatre__link:hover {
   color: #ff7700;
+}
+
+.hover-modal {
+    position: fixed;
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    width: 260px;
+    max-width: calc(100vw - 32px);
+    color: #f8fafc;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 45px -20px rgba(15, 23, 42, 0.9);
+    pointer-events: none;
+    z-index: 50;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.hover-modal__image {
+    width: 96px;
+    height: 128px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    flex-shrink: 0;
+}
+
+.hover-modal__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.hover-modal__title {
+    margin: 0;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+}
+
+.hover-modal__rating {
+    margin: 0;
+    font-size: 0.85rem;
+    color: rgb(255, 251, 0);
+}
+
+.hover-modal__description {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    color: rgb(255, 255, 255);
+    text-align: left;
 }
 
 @media (max-width: 600px) {
