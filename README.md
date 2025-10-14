@@ -31,7 +31,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/akramit/kino-prague">
-    <img src="images/site-preview.png" alt="Site Preview" width="80" height="80">
+    <img src="images/site-preview.png" alt="Site Preview" width="180" height="100">
   </a>
 
 <h3 align="center">Kino Prague</h3>
