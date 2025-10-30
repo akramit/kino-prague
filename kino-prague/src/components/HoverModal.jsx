@@ -20,7 +20,7 @@ export function HoverModal({ isVisible, position, movie }) {
       <div className="hover-modal__content">
         <h4 className="hover-modal__title">{movie?.name}</h4>
         <p className="hover-modal__rating">IMDb: {movie?.rating ? movie.rating : 'NA'}</p>
-        <p className="hover-modal__description">{movie?.description}</p>
+        <p className="hover-modal__description">{movie?.plot}</p>
       </div>
     </div>
   );

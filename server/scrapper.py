@@ -92,6 +92,8 @@ def get_movie_details(title) :
             movie_info['awards'] = res_json.get('Awards', '')
             movie_info['plot'] = res_json.get('Plot', 'NA')
             movie_info['poster'] = res_json.get('Poster')
+        else : 
+            movie_info['errors'] = res.text
     
     return movie_info
 
@@ -144,8 +146,10 @@ def gather_data_from_url(url: str) -> List[Dict[str, Any]]:
                             "rating": movie_info['rating'],
                             "plot" : movie_info['plot'],
                             "awards" : movie_info['awards'],
-                            "poster": movie_info['poster']
+                            "poster": movie_info['poster'],
+                            "errors" : movie_info.get('errors')
                         })
+                        
 
             schedule.append({
                 "date": date_str,

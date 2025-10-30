@@ -10,7 +10,7 @@ export const THEATRE_DATA = [
             "name": "The Addams Family (1991)",
             "time": "8:30 pm",
             'rating' : '7.0',
-            'description' : 'The rich Addams family lives in a nonconformist manner. But this wealthy eccentricity is threatened when the family lawyer and a mother-son duo plot to steal the riches of the family. A battle ensues.'
+            'plot' : 'The rich Addams family lives in a nonconformist manner. But this wealthy eccentricity is threatened when the family lawyer and a mother-son duo plot to steal the riches of the family. A battle ensues.'
           }
         ]
       },
