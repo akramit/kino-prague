@@ -5,6 +5,7 @@ import { Theatre } from './components/Theatre';
 import { THEATRE_DATA } from './components/theatreData';
 
 const API_URL = 'https://kino-prague-production.up.railway.app/theatres'
+// const DEV_URL = 'http://127.0.0.1:5001/theatres'
 
 // async function fetchTheatresData() {
 //   try {
@@ -35,8 +36,8 @@ function App() {
     fetch(API_URL)
     .then(response => {
       if(!response.ok) {
-        console.error('Error ' + response.status);
-        return;
+        console.error('Error' + response.status);
+        return {data: '', error: response.text}
       }
       return response.json();
     }) 
