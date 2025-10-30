@@ -6,6 +6,7 @@ from typing import Any, Dict, List
 import requests
 from bs4 import BeautifulSoup
 import json
+import os
 
 
 websites = [
@@ -75,6 +76,24 @@ def _format_time(raw_time: str) -> str:
         return f"{hours - 12}:{minutes:02d} pm"
     return f"{hours}:{minutes:02d} am"
 
+OMDb_KEY = os.environ.get('OMDb')
+
+def get_movie_details(title) :
+    API_URL = f'http://www.omdbapi.com/?apikey={OMDb_KEY}&t={title}'
+    # use param s for searching with all possible titles
+    fields = ['rating', 'awards', 'plot', 'poster']
+    movie_info = dict.fromkeys(fields)
+    if title:
+        res = requests.get(API_URL)
+        if res.status_code == 200 :
+            res_json = res.json()
+            movie_info['name'] = title
+            movie_info['rating'] = res_json.get('imdbRating', 'NA')
+            movie_info['awards'] = res_json.get('Awards', '')
+            movie_info['plot'] = res_json.get('Plot', 'NA')
+            movie_info['poster'] = res_json.get('Poster')
+    
+    return movie_info
 
 def gather_data_from_url(url: str) -> List[Dict[str, Any]]:
     """Fetch programme information from ``url`` and return structured data."""
@@ -118,9 +137,14 @@ def gather_data_from_url(url: str) -> List[Dict[str, Any]]:
                     title = title_node.get_text(strip=True) if title_node else ""
 
                     if title or raw_time:
+                        movie_info = get_movie_details(title)
                         shows.append({
                             "name": title,
                             "time": _format_time(raw_time),
+                            "rating": movie_info['rating'],
+                            "plot" : movie_info['plot'],
+                            "awards" : movie_info['awards'],
+                            "poster": movie_info['poster']
                         })
 
             schedule.append({
@@ -148,10 +172,10 @@ def get_theatres_data() :
 if __name__ == '__main__' : 
     final_data = []
     for website in websites:
-        #if website["name"] == 'Kino Aero' :
-        cinema_data = {}
-        cinema_data['theatreName'] = website['theatreName']
-        shows = gather_data_from_url(website['url'])
-        cinema_data['shows'] = shows
-        final_data.append(cinema_data)
+        if website["theatreName"] == 'Kino Aero' :
+            cinema_data = {}
+            cinema_data['theatreName'] = website['theatreName']
+            shows = gather_data_from_url(website['url'])
+            cinema_data['shows'] = shows
+            final_data.append(cinema_data)
     print(json.dumps(final_data))    
