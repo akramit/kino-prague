@@ -69,11 +69,15 @@ export function Theatre({ theatre }) {
                       <tr
                         key={`${show.date}-${movie.time}-${movie.name}`}
                         className="table-showtimes__row"
-                        onMouseEnter={(event) => handleMovieEnter(movie, event)}
-                        onMouseLeave={handleMovieLeave}
+                        
                       >
-                        <td className="td-showtimes time-cell">{movie.time}</td>
-                        <td className="td-showtimes movie">{movie.name}</td>
+                        <td className="td-showtimes time-cell">
+                          {movie.time}</td>
+                        <td className="td-showtimes movie"
+                            onMouseEnter={(event) => handleMovieEnter(movie, event)}
+                            onMouseLeave={handleMovieLeave}
+                        >
+                          {movie.name}</td>
                       </tr>
                     ))
                   ) : (

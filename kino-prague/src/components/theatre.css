@@ -109,6 +109,7 @@
     margin: 0;
     font-size: 1rem;
     letter-spacing: 0.02em;
+    text-align: center;
 }
 
 .hover-modal__rating {
