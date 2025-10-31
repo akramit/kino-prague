@@ -4,6 +4,8 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from scrapper import get_theatres_data
+from datetime import datetime
+
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -38,10 +40,18 @@ def create_app() -> Flask:
         name = request.args.get("name", "world")
         return jsonify(message=f"Hello, {name}!"), 200
     
+    cached_information = dict()
+    
     @app.get('/theatres')
     def theatres_data () :
         try :
-            theatres_data = get_theatres_data()
+            todays_date = datetime.today().strftime('%Y-%m-%d')
+            if todays_date in cached_information.keys() :
+                theatres_data = cached_information[todays_date]
+            else :
+                theatres_data = get_theatres_data()
+                cached_information[todays_date] = theatres_data
+            # theatres_data = get_theatres_data()
             return jsonify(data=theatres_data), 200
         except Exception as e:
              return jsonify(error = e)
@@ -61,5 +71,7 @@ def create_app() -> Flask:
 # WSGI entrypoint for Gunicorn: `gunicorn app:app`
 app = create_app()
 
-# if __name__ == '__main__':
-#     app.run(host="0.0.0.0", port=5001, debug=True)
+
+# Running locally
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=5001, debug=True)
