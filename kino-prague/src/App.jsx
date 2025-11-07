@@ -3,52 +3,58 @@ import './App.css'
 import { TopBar } from './components/TopBar';
 import { Theatre } from './components/Theatre';
 import { THEATRE_DATA } from './components/theatreData';
+// To be updated later
+// import { LoadingSpinner } from './components/spinner'
 
 const API_URL = 'https://kino-prague-production.up.railway.app/theatres'
+const SERVER_2 = 'https://kino-prague.onrender.com/theatres'
 // const DEV_URL = 'http://127.0.0.1:5001/theatres'
 
-// async function fetchTheatresData() {
-//   try {
-//     const response = await fetch('https://kino-prague-production.up.railway.app/theatres');
-
-//     if (!response.ok) {
-//       console.log(" TEST MSG: server response failed")
-//       return THEATRE_DATA;
-//     }
-//     const receivedData = await response.json();
-//     return receivedData?.data;
-//   }
-//   catch (error) {
-//     console.log(" TEST MSG: server response failed")
-//     console.error(error);
-//     return THEATRE_DATA;
-//   }
-
-// };
+async function fetchTheatresData(endpoint) {
+  try {
+    const response = await fetch(endpoint);
+    if (!response.ok) {
+      const error = await response.text()
+      console.log(error)
+      return {status: 'failed', error: error}
+    }
+    const theatresData = await response.json();
+    return {status: 'success', data: theatresData?.data}
+  }
+  catch (error) {
+    console.error(error.message);
+    return {status: 'failed', error: error}
+  }
+};
 
 function App() {
   
   const [theatresData, setTheatresData] = useState(THEATRE_DATA);
   const [currentTheatre, setCurrentTheatre] = useState({});  
-  const theatreNames = theatresData.map( theatre => theatre.theatreName);
+  const theatreNames = theatresData?.map( theatre => theatre?.theatreName);
   
   useEffect(() => {
-    fetch(API_URL)
-    .then(response => {
-      if(!response.ok) {
-        console.error('Error' + response.status);
-        return {data: '', error: response.text}
+    const updateTheatresData = (theatresData) => {
+      setTheatresData(theatresData?.data);
+      setCurrentTheatre(theatresData?.data?.[0]);
+    }
+    async function fetchData() {
+      var theatresData = await fetchTheatresData(API_URL);
+      if (theatresData?.status === 'success') {
+        updateTheatresData(theatresData);
       }
-      return response.json();
-    }) 
-    .then(data => {
-      setTheatresData(data?.data);
-      setCurrentTheatre(data?.data[0]);
-    })
-    .catch(error => {
-      console.error(error.message);
-    })
-  },[]);
+      else {
+        theatresData = await fetchTheatresData(SERVER_2);
+        if (theatresData?.status === 'success') {
+          updateTheatresData(theatresData);
+        }
+        else {
+          console.error(theatresData?.error)
+        }
+      }
+    }
+    fetchData();
+  }, [])
 
   const handleTheatreChange = useCallback((theatreName) => {
     const newTheatre = theatresData.find((theatre) => theatre.theatreName === theatreName);
