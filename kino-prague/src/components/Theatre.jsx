@@ -32,7 +32,7 @@ export function Theatre({ theatre }) {
   };
 
   const theatreUrl = THEATRES_URL.find(
-    (th) => th.name === theatre.theatreName,
+    (th) => th.name === theatre?.theatreName,
   )?.url;
 
   return (
