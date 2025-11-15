@@ -4,7 +4,20 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from scrapper import get_theatres_data
-from datetime import datetime
+from datetime import datetime, timedelta
+import threading
+import time
+
+
+cached_information = dict()
+
+def cache_theatre_data_periodically():
+    while True:
+        todays_date = datetime.today().strftime('%Y-%m-%d')
+        if todays_date not in cached_information.keys():
+            theatres_data = get_theatres_data()
+            cached_information[todays_date] = theatres_data
+        time.sleep(60 * 60 * 6) # 6 hours
 
 
 def create_app() -> Flask:
@@ -30,6 +43,16 @@ def create_app() -> Flask:
         file_handler.setLevel(logging.INFO)
         app.logger.addHandler(file_handler)
 
+    # @app.before_first_request
+    # def cache_theatre_data() :
+    #     thread = threading.Thread(target=cache_theatre_data_periodically)
+    #     thread.daemon = True
+    #     thread.start()
+    with app.app_context():
+        thread = threading.Thread(target = cache_theatre_data_periodically)
+        thread.daemon = True
+        thread.start()
+
     # --- routes ---
     @app.get("/healthz")
     def healthz():
@@ -39,19 +62,20 @@ def create_app() -> Flask:
     def hello():
         name = request.args.get("name", "world")
         return jsonify(message=f"Hello, {name}!"), 200
-    
-    cached_information = dict()
+        
     
     @app.get('/theatres')
     def theatres_data () :
         try :
             todays_date = datetime.today().strftime('%Y-%m-%d')
+            yesterdays_date = (datetime.today() - timedelta(days=1)).strftime('%Y-%m-%d')
             if todays_date in cached_information.keys() :
-                theatres_data = cached_information[todays_date]
+                theatres_data = cached_information[todays_date]    
             else :
+                if yesterdays_date in cached_information.keys():
+                    return jsonify(data = cached_information[yesterdays_date]), 200
                 theatres_data = get_theatres_data()
                 cached_information[todays_date] = theatres_data
-            # theatres_data = get_theatres_data()
             return jsonify(data=theatres_data), 200
         except Exception as e:
              return jsonify(error = e)
