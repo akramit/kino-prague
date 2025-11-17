@@ -108,7 +108,13 @@ def create_app() -> Flask:
 
     @app.get('/db_data')
     def fetch_db_data():
-        output = dao.fetch_all_data()
+        output_from_db = dao.fetch_all_data()
+        output = [
+            {'id': o['id'],
+             'date': o['date'],
+             'data': o['data'],
+             'updatedAt': o['updatedAt']
+            } for o in output_from_db ]
         return jsonify(data = output), 200
 
     # --- JSON errors ---

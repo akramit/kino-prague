@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 from datetime import datetime
 import re
@@ -7,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import os
+from dotenv import load_dotenv
 
 
 websites = [
@@ -76,6 +76,7 @@ def _format_time(raw_time: str) -> str:
         return f"{hours - 12}:{minutes:02d} pm"
     return f"{hours}:{minutes:02d} am"
 
+load_dotenv()
 OMDb_KEY = os.environ.get('OMDb')
 
 def get_movie_details(title) :
