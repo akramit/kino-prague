@@ -6,6 +6,7 @@ class UseDatabase:
 
     def __enter__(self) -> 'cursor':
         self.conn = sqlite3.connect(self.configuration.get('db_path', 'db/theatres.db'))
+        self.conn.row_factory = sqlite3.Row
         self.cursor = self.conn.cursor()
         return self.cursor
     

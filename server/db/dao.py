@@ -37,7 +37,8 @@ def fetch_data_for_date(date):
     with UseDatabase(db_config) as cursor:
         cursor.execute(_sql,values)
         output = cursor.fetchall()
-    return output
+    # Only one data for a date, so return the data at 0th row
+    return output[0]
 
 def fetch_latest_data():
     output = fetch_all_data()

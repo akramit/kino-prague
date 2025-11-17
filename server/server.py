@@ -39,12 +39,13 @@ def get_movie_data() :
         theatres_data = cached_information[yesterdays_date]
     else:
         # Fetch from db: convert string to dict or json
-        theatres_db_data = dao.fetch_data_for_date(todays_date)
+        theatres_db_data = dao.fetch_data_for_date(todays_date) 
         if not theatres_db_data :
             theatres_db_data = dao.fetch_latest_data()
         # if theatres_db_data populated 
         if theatres_db_data:
             cached_information[todays_date] = json.loads(theatres_db_data['data'])
+            print(json.loads(theatres_db_data['data']))
             theatres_data = cached_information[todays_date]
         else :
             return None
